@@ -52,7 +52,7 @@ export default function Home() {
               </div>
               <div className="mt-2">
                 <label className="block text-sm font-light">
-                  Add "https://":
+                  Add &quot;https://&quot;:
                   <input
                     type="checkbox"
                     className="ml-2"
@@ -85,7 +85,7 @@ export default function Home() {
             <img
               src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
                 inputText
-              )}&size=200x200`}
+              )}&size=${size}x${size}`}
               alt="QR Code"
             />
           </div>
