@@ -1,103 +1,104 @@
-import Image from "next/image";
+'use client';
+
+import { useState } from 'react';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [inputText, setInputText] = useState('');
+  const [generate, setGenerate] = useState(false);
+  const [size, setSize] = useState(200);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen animated-gradient relative">
+      {!generate && (
+        <>
+          <h1 className="text-3xl font-extralight">QR Code Generator</h1>
+
+          <div className="mt-4">
+            <input
+              type="text"
+              placeholder="Enter text to generate QR code"
+              className="border rounded px-4 py-2 w-64"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          </div>
+
+          <div className="mt-4">
+            <details className="border rounded px-4 py-2 w-64">
+              <summary className="cursor-pointer">Optional Settings</summary>
+              <div className="mt-2">
+                <label className="block text-sm font-light relative">
+                  QR Code Size (px):
+                  <input
+                  type="number"
+                  placeholder="200"
+                  className="border rounded px-2 py-1 w-full mt-1"
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value, 10);
+                    if (isNaN(value)) {
+                    e.target.setCustomValidity('Please enter a valid integer.');
+                    setSize(200);
+                    } else {
+                    e.target.setCustomValidity('');
+                    setSize(value);
+                    }
+                  }}
+                  onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Please enter a valid integer.')}
+                  />
+                  <span className="text-xs text-red-500 absolute mt-1 hidden peer-invalid:block">
+                  Please enter a valid integer.
+                  </span>
+                </label>
+              </div>
+              <div className="mt-2">
+                <label className="block text-sm font-light">
+                  Add "https://":
+                  <input
+                    type="checkbox"
+                    className="ml-2"
+                    onChange={(e) =>
+                      setInputText((prev) =>
+                        e.target.checked ? `https://${prev}` : prev.replace(/^https:\/\//, '')
+                      )
+                    }
+                  />
+                </label>
+              </div>
+            </details>
+          </div>
+
+          <div className="mt-4">
+            <button
+              className="rounded-full border font-thin text-xl bg-transparent px-6 py-3 hover:scale-105 transition-transform duration-300 ease-in-out overflow-hidden border-white text-white relative z-10"
+              onClick={() => setGenerate(true)}
+            >
+              Generate
+            </button>
+          </div>
+        </>
+      )}
+
+      {generate && (
+        <>
+          <h2 className="text-2xl font-extralight">Generated QR Code</h2>
+          <div className="mt-4">
+            <img
+              src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
+                inputText
+              )}&size=200x200`}
+              alt="QR Code"
+            />
+          </div>
+          <div className="mt-4">
+            <button
+              className="rounded-full border font-thin text-xl bg-transparent px-6 py-3 hover:scale-105 transition-transform duration-300 ease-in-out overflow-hidden border-white text-white relative z-10"
+              onClick={() => setGenerate(false)}
+            >
+              Generate Another
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

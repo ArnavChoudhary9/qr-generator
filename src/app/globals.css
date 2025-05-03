@@ -5,6 +5,27 @@
   --foreground: #171717;
 }
 
+@keyframes gradient-x {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 50% 0%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  75% {
+    background-position: 50% 100%;
+  }
+}
+
+.animated-gradient {
+  background: linear-gradient(-45deg, #921bb3, #1d4ed8, #22c55e, #f59e0b); /* purple-700, blue-700, green-500, amber-500 */
+  background-size: 400% 400%;
+  animation: gradient-x 12s ease infinite;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
